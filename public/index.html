@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BebidasUNACH ERP</title>
+    <meta name="description" content="Sistema de gestión ERP para BebidasUNACH">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <h1>BebidasUNACH</h1>
+            </div>
+            <ul class="nav-links">
+                <li class="active" data-target="pos-view">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    Punto de Venta
+                </li>
+                <li data-target="inventory-view">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                    Inventario
+                </li>
+                <li data-target="sales-view">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    Ventas
+                </li>
+                <li data-target="reports-view">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"></path></svg>
+                    Reportes
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- View: POS (Punto de Venta) -->
+            <section id="pos-view" class="view active">
+                <header class="view-header">
+                    <h2>Nueva Venta</h2>
+                    <p class="subtitle">Selecciona los productos y el método de pago.</p>
+                </header>
+                <div class="pos-container">
+                    <div class="product-grid" id="pos-products">
+                        <!-- Products will be injected here via JS -->
+                    </div>
+                    
+                    <div class="cart-panel">
+                        <h3>Resumen de Venta</h3>
+                        <div class="cart-items" id="cart-items">
+                            <!-- Cart items injected here -->
+                            <div class="empty-cart">El carrito está vacío</div>
+                        </div>
+                        <div class="cart-summary">
+                            <div class="summary-row total-row">
+                                <span>Total</span>
+                                <span id="cart-total">$0.00</span>
+                            </div>
+                            
+                            <div class="payment-methods">
+                                <label class="payment-option selected">
+                                    <input type="radio" name="payment" value="Efectivo" checked>
+                                    <div class="payment-card">
+                                        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                        Efectivo
+                                    </div>
+                                </label>
+                                <label class="payment-option">
+                                    <input type="radio" name="payment" value="Transferencia">
+                                    <div class="payment-card">
+                                        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                                        Transferencia
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <button id="btn-checkout" class="btn-primary" disabled>Completar Venta</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- View: Inventory -->
+            <section id="inventory-view" class="view">
+                <header class="view-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div>
+                        <h2>Inventario</h2>
+                        <p class="subtitle">Gestiona tus bebidas y revisa tu stock.</p>
+                        <div class="valuation-card" style="margin-top: 16px; background: rgba(138, 43, 226, 0.1); border: 1px solid var(--primary); padding: 12px 20px; border-radius: var(--radius-sm); display: inline-flex; gap: 24px;">
+                            <div>
+                                <span style="color: var(--text-muted); font-size: 0.9rem;">Costo Total Invertido:</span>
+                                <strong id="inventory-cost" style="color: white; font-size: 1.4rem; margin-left: 8px;">$0</strong>
+                            </div>
+                            <div>
+                                <span style="color: var(--text-muted); font-size: 0.9rem;">Ganancia Esperada:</span>
+                                <strong id="inventory-profit" style="color: var(--success); font-size: 1.4rem; margin-left: 8px;">$0</strong>
+                            </div>
+                            <div>
+                                <span style="color: var(--text-muted); font-size: 0.9rem;">Ganancia Obtenida:</span>
+                                <strong id="inventory-realized" style="color: var(--success); font-size: 1.4rem; margin-left: 8px;">$0</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-primary" style="width: auto; padding: 12px 24px;" id="btn-open-add-product">+ Añadir Producto</button>
+                </header>
+                <div class="card glass">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Categoría</th>
+                                <th>Costo</th>
+                                <th>Precio Venta</th>
+                                <th>Stock</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-table-body">
+                            <!-- Inventory rows injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- View: Sales -->
+            <section id="sales-view" class="view">
+                <header class="view-header">
+                    <h2>Historial de Ventas</h2>
+                    <p class="subtitle">Revisa los ingresos y métodos de pago.</p>
+                </header>
+                <div class="card glass">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID Venta</th>
+                                <th>Fecha</th>
+                                <th>Detalle</th>
+                                <th>Método de Pago</th>
+                                <th>Total</th>
+                                <th>Ganancia</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sales-table-body">
+                            <!-- Sales rows injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- View: Reports -->
+            <section id="reports-view" class="view">
+                <header class="view-header report-header">
+                    <div>
+                        <h2>Reportes</h2>
+                        <p class="subtitle">Ingresos, costos y ganancias por período.</p>
+                    </div>
+                    <div class="period-toggle" role="tablist">
+                        <button class="period-btn active" data-period="day" id="btn-period-day">Diario</button>
+                        <button class="period-btn" data-period="week" id="btn-period-week">Semanal</button>
+                        <button class="period-btn" data-period="month" id="btn-period-month">Mensual</button>
+                    </div>
+                </header>
+
+                <div class="report-cards">
+                    <div class="report-card glass"><span>Ingresos</span><strong id="rep-revenue">$0</strong></div>
+                    <div class="report-card glass"><span>Costo</span><strong id="rep-cost">$0</strong></div>
+                    <div class="report-card glass"><span>Ganancia</span><strong id="rep-profit" class="positive">$0</strong></div>
+                    <div class="report-card glass"><span>Ventas / Unidades</span><strong id="rep-count">0 / 0</strong></div>
+                </div>
+
+                <div class="card glass" style="margin-bottom: 24px;">
+                    <div id="report-chart" class="report-chart"></div>
+                </div>
+
+                <div class="card glass">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Período</th>
+                                <th>Ventas</th>
+                                <th>Unidades</th>
+                                <th>Ingresos</th>
+                                <th>Costo</th>
+                                <th>Ganancia</th>
+                                <th>Más vendido</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div id="add-product-modal" class="modal">
+        <div class="modal-content glass">
+            <h3>Añadir Nuevo Producto</h3>
+            <form id="add-product-form" class="form-container">
+                <div class="form-group">
+                    <label>Nombre del Producto</label>
+                    <input type="text" id="new-product-name" required placeholder="Ej: Fanta Naranja">
+                </div>
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <select id="new-product-category" required>
+                        <option value="Gaseosa">Gaseosa</option>
+                        <option value="Energética">Energética</option>
+                        <option value="Agua">Agua</option>
+                        <option value="Jugo">Jugo</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Costo de Compra ($)</label>
+                    <input type="number" id="new-product-cost" required min="1" placeholder="Ej: 750">
+                </div>
+                <div class="form-group">
+                    <label>Precio de Venta ($)</label>
+                    <input type="number" id="new-product-price" required min="1" placeholder="Ej: 1500">
+                </div>
+                <div class="form-group">
+                    <label>Stock Inicial</label>
+                    <input type="number" id="new-product-stock" required min="0" placeholder="Ej: 12">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="btn-close-modal">Cancelar</button>
+                    <button type="submit" class="btn-primary" style="width: auto;">Guardar Producto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notifications Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+</body>
+</html>
